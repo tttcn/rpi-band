@@ -1,2 +1,2 @@
-# rpi-ring
-A smart ring prototype based on raspberry pi (model zero w).
+# rpi-band
+A smart band prototype based on raspberry pi (model zero w).
