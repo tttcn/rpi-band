@@ -28,22 +28,13 @@ class Scheduler:
     def run(self, broadcaster, observer):
         self.detune()
         while(True):
-            # broadcaster.start()
-            # print("start broadcasting")
-            # sleep(self.__broadcast_interval)
-            # broadcaster.stop()
-            # print("stop broadcasting")
             try:
                 broadcaster.start()
-                # print("start broadcasting")
                 sleep(self.__broadcast_interval)
                 broadcaster.stop()
-                # print("stop broadcasting")
                 observer.start()
-                # print("start observing")
                 sleep(self.__observe_interval)
                 observer.stop()
-                # print("stop observing")
             except:
                 print("Scheduler run exception!")
                 return

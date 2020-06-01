@@ -10,17 +10,20 @@ from certification import check_prefix
 class Observer(object):
     '''
     '''
-    def __init__(self, url="https://thu-band.org"):
+
+    def __init__(self, url="https://thu-band.org", feedback_function=None):
         self.adapter = get_provider().get_adapter()
 
         self.observer = OB(self.adapter)
         self.observer.on_advertising_data = self.on_advertisement
 
+        if (callable(feedback_function)):
+            self.feedback = feedback_function
+        else:
+            print("Your feedback function is not callable, using default.")
+            self.feedback = lambda: print("Distance less than 1m")
+
     def print_eddystone_values(self, data):
-        """
-        :param data:
-        :return:
-        """
         expected_keys = {'name space': 'hex_format',
                          'instance': 'hex_format',
                          'url': 'string_format',
@@ -44,7 +47,12 @@ class Observer(object):
     def on_advertisement(self, advertisement):
         if (check_prefix("https://thu-band.org")):
             print(advertisement)
+            if (self.distance(advertisement) < 1):
+                self.feedback()
             # self.print_eddystone_values(advertisement.mfg_data)
+
+    def distance(self, advertisement):
+        return 0.5
 
     def start(self):
         self.observer.start()
@@ -52,6 +60,7 @@ class Observer(object):
 
     def stop(self):
         self.observer.stop()
+
 
 if __name__ == "__main__":
     observer = Observer()
